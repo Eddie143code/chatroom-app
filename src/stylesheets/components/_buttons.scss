@@ -1,0 +1,15 @@
+.chatroom-name {
+  height: 4vh;
+  width: 25vw;
+  border-radius: 7px;
+  color: #dfedff;
+  background-color: #4622fe;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--chatroom-btn-press);
+  }
+  &:active {
+    background-color: var(--chatroom-btn-press);
+  }
+}
