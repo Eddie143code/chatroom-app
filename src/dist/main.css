@@ -91,6 +91,21 @@ button {
   height: 6%;
   width: 50%;
 }
+@media (min-width: 43.75em) {
+  .join-container {
+    width: 70%;
+  }
+}
+@media (min-width: 56.25em) {
+  .join-container {
+    width: 55%;
+  }
+}
+@media (min-width: 90em) {
+  .join-container {
+    width: 35%;
+  }
+}
 
 .chatroomlist-container {
   height: 80%;
@@ -110,7 +125,24 @@ button {
   height: 70%;
 }
 .chatroomlist-container__button {
+  height: 40%;
+  width: 30%;
   margin-top: 1rem;
+}
+@media (min-width: 43.75em) {
+  .chatroomlist-container {
+    width: 70%;
+  }
+}
+@media (min-width: 56.25em) {
+  .chatroomlist-container {
+    width: 55%;
+  }
+}
+@media (min-width: 90em) {
+  .chatroomlist-container {
+    width: 35%;
+  }
 }
 
 .chatroom-container {
@@ -119,7 +151,22 @@ button {
   height: 92vh;
   width: 100%;
   margin: 0 auto;
-  overflow: scroll;
+  overflow-y: scroll;
+}
+@media (min-width: 43.75em) {
+  .chatroom-container {
+    width: 70%;
+  }
+}
+@media (min-width: 56.25em) {
+  .chatroom-container {
+    width: 55%;
+  }
+}
+@media (min-width: 90em) {
+  .chatroom-container {
+    width: 35%;
+  }
 }
 .chatroom-container__heading {
   display: flex;
@@ -138,6 +185,9 @@ button {
   margin-left: 2rem;
 }
 .chatroom-container__msg-container-receive {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   margin: 2rem 0;
   height: -webkit-fit-content;
   height: -moz-fit-content;
@@ -145,7 +195,6 @@ button {
   width: 100%;
 }
 .chatroom-container__msg-container-receive__msg-name-receive {
-  float: left;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
@@ -153,16 +202,19 @@ button {
   width: -moz-fit-content;
   width: fit-content;
   font-size: 1rem;
+  text-align: left;
 }
 .chatroom-container__msg-container-receive__msg-receive {
-  float: left;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   width: 80%;
-  margin: auto;
+  text-align: left;
 }
 .chatroom-container__msg-container-send {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   margin: 2rem 0;
   width: 100%;
   height: -webkit-fit-content;
@@ -170,7 +222,6 @@ button {
   height: fit-content;
 }
 .chatroom-container__msg-container-send__msg-name-send {
-  float: right;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
@@ -181,7 +232,6 @@ button {
   font-size: 1rem;
 }
 .chatroom-container__msg-container-send__msg-send {
-  float: right;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
@@ -192,11 +242,30 @@ button {
 .msg-input-container {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
   height: 100%;
+  width: 100%;
 }
 .msg-input-container__msg-input {
   height: 80%;
+  width: 70%;
+}
+@media (min-width: 43.75em) {
+  .msg-input-container__msg-input {
+    height: 80%;
+    width: 70%;
+  }
+}
+@media (min-width: 56.25em) {
+  .msg-input-container__msg-input {
+    height: 80%;
+    width: 55%;
+  }
+}
+@media (min-width: 90em) {
+  .msg-input-container__msg-input {
+    height: 80%;
+    width: 35%;
+  }
 }
 
 /* .chatroom-heading {
@@ -239,8 +308,6 @@ button {
 
 */
 .chatroom-name {
-  height: 4vh;
-  width: 25vw;
   border-radius: 7px;
   color: #dfedff;
   background-color: #4622fe;

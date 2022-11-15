@@ -7,9 +7,9 @@ import Chatroom from "./pages/Chatroom";
 function App() {
   return (
     <>
-      {/* <Join /> */}
-      {/* <ChatroomList /> */}
-      <Chatroom />
+      {/*  <Join /> */}
+      {/*  <ChatroomList /> */}
+      {/*  <Chatroom /> */}
     </>
   );
 }
