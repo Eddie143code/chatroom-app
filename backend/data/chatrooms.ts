@@ -4,6 +4,7 @@ export type chatroom =
     }
   | undefined;
 
+/*
 export type datatype = [chatroom];
 
 const data: [] = [];
@@ -14,3 +15,5 @@ const dataFinal: chatroom[] = data.map((obj) => {
 });
 
 export default dataFinal;
+
+*/

@@ -1,9 +1,9 @@
 @use "../abstracts/breakpoints" as b;
 
-* {
+/* * {
   border: solid;
   border-width: 0.1rem;
-}
+} */
 
 .grid-main {
   display: grid;
@@ -67,21 +67,30 @@
   }
 
   &__button {
-    height: 40%;
-    width: 30%;
+    height: 5vh;
+    width: 35vw;
     margin-top: 1rem;
   }
 
   @include b.breakpoint(medium) {
     width: 70%;
+    &__button {
+      width: 30vw;
+    }
   }
 
   @include b.breakpoint(large) {
     width: 55%;
+    &__button {
+      width: 25vw;
+    }
   }
 
   @include b.breakpoint(x-large) {
     width: 35%;
+    &__button {
+      width: 20vw;
+    }
   }
 }
 

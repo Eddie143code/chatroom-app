@@ -55,13 +55,10 @@ button {
 
 :root {
   --font-sans: "Open Sans", sans-serif;
-}
-
-* {
+} /* * {
   border: solid;
   border-width: 0.1rem;
-}
-
+} */
 .grid-main {
   display: grid;
   grid-template-columns: 1fr;
@@ -125,23 +122,32 @@ button {
   height: 70%;
 }
 .chatroomlist-container__button {
-  height: 40%;
-  width: 30%;
+  height: 5vh;
+  width: 35vw;
   margin-top: 1rem;
 }
 @media (min-width: 43.75em) {
   .chatroomlist-container {
     width: 70%;
   }
+  .chatroomlist-container__button {
+    width: 30vw;
+  }
 }
 @media (min-width: 56.25em) {
   .chatroomlist-container {
     width: 55%;
   }
+  .chatroomlist-container__button {
+    width: 25vw;
+  }
 }
 @media (min-width: 90em) {
   .chatroomlist-container {
     width: 35%;
+  }
+  .chatroomlist-container__button {
+    width: 20vw;
   }
 }
 
@@ -318,4 +324,4 @@ button {
 }
 .chatroom-name:active {
   background-color: var(--chatroom-btn-press);
-}/*# sourceMappingURL=main.css.map */
+}
