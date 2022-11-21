@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import io from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 
 import {
   create,
@@ -20,6 +21,7 @@ const Chatrooms = () => {
   const { chatrooms }: any = useSelector((state: any) => state.chat);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const roomSubmit = async (e: any) => {
     e.preventDefault();
@@ -27,7 +29,15 @@ const Chatrooms = () => {
 
     await dispatch(create(roomTemp));
     setRoom(roomTemp);
+
     // await dispatch(createdRoom());
+  };
+
+  const roomClick = (e: any) => {
+    console.log(e.target.name);
+    localStorage.setItem("room", e.target.name);
+
+    navigate(`/chatroomlist/chatroom/${e.target.name}`);
   };
 
   useEffect(() => {
@@ -41,7 +51,6 @@ const Chatrooms = () => {
 
   return (
     <main className="grid-main">
-      <button onClick={() => console.log(chatrooms)}></button>
       <article className="chatroomlist-container">
         <h1 className="chatroomlist-container__head-one">Join as:</h1>
         <h3 className="chatroomlist-container__head-three">{name}</h3>
@@ -52,7 +61,12 @@ const Chatrooms = () => {
         {chatrooms &&
           chatrooms.map((chatroom: any) => {
             return (
-              <button className="chatroomlist-container__button chatroom-name">
+              <button
+                key={chatroom}
+                name={chatroom}
+                onClick={roomClick}
+                className="chatroomlist-container__button chatroom-name"
+              >
                 {chatroom}
               </button>
             );

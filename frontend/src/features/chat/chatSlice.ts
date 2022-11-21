@@ -12,6 +12,7 @@ interface chatState {
 
 let initialState: any = {
   chatrooms: [],
+  messages: [],
 };
 
 const ENDPOINT = "http://localhost:3001";
@@ -53,10 +54,17 @@ export const chatSlice = createSlice({
 
       return state;
     },
+    sendMsg: (state, payload) => {
+      console.log("in sendMsg");
+      console.log(payload.payload);
+      const message = payload.payload;
+      state.messages.push(message);
+
+      return state;
+    },
 
     create: (state, payload: any) => {
       const roomName = payload.payload;
-
       socket.emit("createRoom", roomName, (error: any) => {
         if (error) {
           console.log(error);
@@ -74,7 +82,7 @@ export const chatSlice = createSlice({
   },
 });
 
-export const { getRoomsEmit, create, createdRoom, getRoomsOn } =
+export const { getRoomsEmit, create, createdRoom, getRoomsOn, sendMsg } =
   chatSlice.actions;
 
 export default chatSlice.reducer;

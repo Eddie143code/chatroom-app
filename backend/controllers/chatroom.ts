@@ -1,6 +1,6 @@
 import { chatroom } from "../data/chatrooms";
 
-const data: any = ["room1", "room2"];
+const data: any = [];
 
 const createChatroom = (roomName: any) => {
   const name = roomName;

@@ -12,7 +12,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Join />}></Route>
         <Route path="/chatroomlist" element={<ChatroomList />}></Route>
-        <Route path="/chatroom" element={<Chatroom />}></Route>
+        <Route
+          path="chatroomlist/chatroom/:name"
+          element={<Chatroom />}
+        ></Route>
       </Routes>
     </>
   );

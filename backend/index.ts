@@ -27,6 +27,19 @@ const io = socketio(server);
 io.on("connection", (socket: any) => {
   console.log("io connected");
 
+  socket.on("join", (roomName: any) => {
+    console.log("in join");
+    const room = roomName;
+    const user = "admin";
+
+    socket.join(room);
+    io.to(room).emit(
+      "message",
+      { user: user, message: "you joined the room" },
+      () => {}
+    );
+  });
+
   socket.on("createRoom", (roomName: any) => {
     const test = createChatroom(roomName);
 
@@ -41,6 +54,11 @@ io.on("connection", (socket: any) => {
     const rooms = getAllRooms();
 
     socket.emit("fetchRooms", { rooms });
+  });
+
+  socket.on("sendMessage", ({ user, room, message }: any) => {
+    socket.join(room);
+    socket.emit("message", { user, message }, () => {});
   });
 });
 
