@@ -5,15 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Messages from "../components/Messages";
 import { sendMsg } from "../features/chat/chatSlice";
+import { endianness } from "os";
 
 const ENDPOINT = "http://localhost:3001";
 
-let socket = io(ENDPOINT);
+let socket: any;
+
+socket = io(ENDPOINT);
 
 const Chatroom = () => {
-  const [user, setUser] = useState<any>();
-
-  const [room, setRoom] = useState<any>();
   const [sendMessage, setSendMessage] = useState<any>("");
 
   const { messages } = useSelector((state: any) => state.chat);
@@ -22,22 +22,22 @@ const Chatroom = () => {
 
   const handleMessage = (e: any) => {
     e.preventDefault();
-    socket.emit("sendMessage", { user, room, message: sendMessage }, () => {});
+    socket.emit("sendMessage", { message: sendMessage }, () => {});
   };
 
   useEffect(() => {
-    const userTemp = localStorage.getItem("user");
-    setUser(userTemp);
-    const joinRoom = localStorage.getItem("room");
-    setRoom(joinRoom);
-
-    socket.emit("join", { user: user, room: room }, () => {});
-
-    socket.on("message", ({ user, message }) => {
+    socket.emit(
+      "joinChat",
+      { user: JSON.stringify(localStorage.getItem("user")) },
+      () => {}
+    );
+    socket.on("message", ({ user, message }: any) => {
+      console.log(user);
       const msg = { user: user, message: message };
       dispatch(sendMsg(msg));
     });
   }, []);
+
   return (
     <main className="grid-main">
       <div className="chatroom-container">
@@ -54,7 +54,6 @@ const Chatroom = () => {
 
         {messages &&
           messages.map((message: any) => {
-            console.log(message);
             return <Messages key={message.message} messages={message} />;
           })}
       </div>

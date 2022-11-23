@@ -1,6 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
+
+const ENDPOINT = "http://localhost:3001";
+let socket = io(ENDPOINT);
 
 const Join = () => {
   const [name, setName] = useState("");
@@ -8,8 +12,11 @@ const Join = () => {
   const navigate = useNavigate();
 
   const submitName = (e: any) => {
+    console.log(name);
     e.preventDefault();
     localStorage.setItem("user", name);
+    socket.emit("createUser", { name });
+
     navigate("/chatroomlist");
   };
 

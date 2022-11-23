@@ -5,6 +5,7 @@ import ChatroomList from "./pages/ChatroomList";
 import Chatroom from "./pages/Chatroom";
 
 import { Route, Routes } from "react-router-dom";
+const ENDPOINT = "http://localhost:3001";
 
 function App() {
   return (

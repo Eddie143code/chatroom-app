@@ -19,7 +19,7 @@ const Messages: any = ({ messages }: any) => {
         </p>
       </div>
     );
-  } else if (name === messages.name) {
+  } else if (name === messages.user) {
     return (
       <div className="chatroom-container__msg-container-send">
         <h3 className="chatroom-container__msg-container-send__msg-name-send">
@@ -30,7 +30,7 @@ const Messages: any = ({ messages }: any) => {
         </p>
       </div>
     );
-  } else if (name !== messages.name) {
+  } else if (name !== messages.user) {
     return (
       <>
         <div className="chatroom-container__msg-container-receive">

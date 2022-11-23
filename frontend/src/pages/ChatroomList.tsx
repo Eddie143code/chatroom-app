@@ -34,7 +34,6 @@ const Chatrooms = () => {
   };
 
   const roomClick = (e: any) => {
-    console.log(e.target.name);
     localStorage.setItem("room", e.target.name);
 
     navigate(`/chatroomlist/chatroom/${e.target.name}`);

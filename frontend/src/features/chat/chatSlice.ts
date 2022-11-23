@@ -55,9 +55,8 @@ export const chatSlice = createSlice({
       return state;
     },
     sendMsg: (state, payload) => {
-      console.log("in sendMsg");
-      console.log(payload.payload);
       const message = payload.payload;
+
       state.messages.push(message);
 
       return state;
