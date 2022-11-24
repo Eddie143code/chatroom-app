@@ -1,20 +1,22 @@
 import { User } from "../models/users";
+//import { sequelize } from "../util/db";
 
 const userCreate = async ({ name }: any) => {
+  console.log(typeof name);
   const user = await User.create({
-    name: JSON.stringify(name),
+    name: String(name),
   });
   return user;
 };
 
-const getCurrentUser = async ({ user }: any) => {
-  const username = await User.findAll();
-  console.log(user);
-  const userReturn = username.find((User: any) => {
-    return User.dataValues.name === user;
-  });
+const getCurrentUser = async (user: any) => {
+  /*  const username = await sequelize.query(
+    "SELECT * FROM users WHERE name = 'eddie'"
+  ); */
 
-  return userReturn;
+  console.log(user);
+  console.log();
+  return;
 };
 
 export { userCreate, getCurrentUser };

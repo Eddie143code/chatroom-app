@@ -22,18 +22,29 @@ const Chatroom = () => {
 
   const handleMessage = (e: any) => {
     e.preventDefault();
-    socket.emit("sendMessage", { message: sendMessage }, () => {});
+    socket.emit(
+      "sendMessage",
+      {
+        user: JSON.stringify(localStorage.getItem("user")),
+        message: sendMessage,
+        room: JSON.stringify(localStorage.getItem("room")),
+      },
+      () => {}
+    );
   };
 
   useEffect(() => {
     socket.emit(
       "joinChat",
-      { user: JSON.stringify(localStorage.getItem("user")) },
+      {
+        user: JSON.stringify(localStorage.getItem("user")),
+        room: localStorage.getItem("room"),
+      },
       () => {}
     );
     socket.on("message", ({ user, message }: any) => {
       console.log(user);
-      const msg = { user: user, message: message };
+      const msg = { user, message };
       dispatch(sendMsg(msg));
     });
   }, []);

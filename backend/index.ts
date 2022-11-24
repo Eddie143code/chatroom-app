@@ -1,11 +1,12 @@
 import express from "express";
 import cors from "cors";
 import router from "./routes/chatrooms";
-import { userCreate, getCurrentUser } from "./controllers/users";
+import { userCreate } from "./controllers/users";
 import { createChatroom, getAllRooms } from "./controllers/chatroom";
 const http = require("http");
 const socketio = require("socket.io");
 const { connectToDatabase } = require("./util/db");
+import { User } from "./models/users";
 
 const app = express();
 
@@ -31,30 +32,34 @@ io.on("connection", (socket: any) => {
     userCreate({ name });
   });
 
-  socket.on("joinChat", ({ user }: any) => {
+  socket.on("joinChat", ({ user, room }: any) => {
     console.log("in join");
 
-    const User: any = getCurrentUser(user);
-
+    console.log("User: ");
+    socket.join(room);
     socket.emit(
       "message",
-      { user: User.name, message: "you joined the room" },
+      { user: user, message: "you joined the room" },
       () => {}
     );
 
-    socket.broadcast
+    /* socket.broadcast
       .to(user.room)
       .emit("message", { User, message: `${User.name} joined the room` });
+      */
   });
 
-  socket.on("sendMessage", ({ message }: any, callback: any) => {
-    console.log("in sendmessage");
+  socket.on("sendMessage", ({ user, message, room }: any, callback: any) => {
+    console.log(`in sendmessage: ${user}, ${message}, ${room} `);
 
-    const user: any = getCurrentUser(socket.id);
+    //const User: any = getCurrentUser({ user });
 
-    socket.join(user.room);
+    const username = User.findOne({ where: { name: user } });
+    console.log(username);
+    socket.join(room);
 
-    io.to(user.room).emit("message", { user: user.name, message });
+    io.to(room).emit("message", { user, message });
+
     callback();
   });
 
