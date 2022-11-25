@@ -47,7 +47,7 @@ io.on("connection", (socket: any) => {
       .to(room)
       .emit("message", { user: user, message: `${user}, has joined the room` });
 
-    io.to(room).emit("roomData", { user: user, message: "rooms of users" });
+    // io.to(room).emit("roomData", { user: user, message: "rooms of users" });
 
     /* socket.broadcast
       .to(user.room)
@@ -56,9 +56,8 @@ io.on("connection", (socket: any) => {
   });
 
   socket.on("sendMessage", ({ user, message, room }: any) => {
-    socket.join(room);
     console.log(`in sendmessage: ${user}, ${message}, ${room} `);
-
+    socket.join(room);
     //const User: any = getCurrentUser({ user });
 
     //const username = User.findOne({ where: { name: user } });
