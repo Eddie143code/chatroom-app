@@ -3,13 +3,16 @@ import { Chatroom } from "../models/chatroom";
 const createRoom = async (req: any, res: any) => {
   const { name, socket } = req.body;
 
-  const roomTest = await Chatroom.findOne({ where: { name: name } });
+  const roomTest = await Chatroom.findOne({
+    where: { name: name, socket: socket },
+  });
 
-  if (roomTest) {
+  if (roomTest.name === name) {
     return res.json(roomTest);
   }
 
   const room = Chatroom.create({ name: name, socket: socket });
+
   return res.json(room);
 };
 

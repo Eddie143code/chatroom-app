@@ -22,13 +22,13 @@ const Chatroom = () => {
 
   const handleMessage = (e: any) => {
     e.preventDefault();
-
     socket.emit(
       "sendMessage",
       {
         user: JSON.stringify(localStorage.getItem("user")),
         message: sendMessage,
-        room: JSON.stringify(localStorage.getItem("socket")),
+        room: JSON.stringify(localStorage.getItem("room")),
+        socket: JSON.stringify(localStorage.getItem("socket")),
       },
       () => {}
     );
@@ -39,7 +39,7 @@ const Chatroom = () => {
       "joinChat",
       {
         user: JSON.stringify(localStorage.getItem("user")),
-        room: localStorage.getItem("socket"),
+        room: JSON.stringify(localStorage.getItem("room")),
       },
       () => {}
     );
@@ -49,9 +49,8 @@ const Chatroom = () => {
       const msg = { user, message };
       dispatch(sendMsg(msg));
     });
-    socket.on("roomData", ({ user, message }: any) => {
-      const msg = { user, message };
-      dispatch(sendMsg(msg));
+    socket.on("roomData", ({ user }: any) => {
+      console.log(user);
     });
   }, []);
 

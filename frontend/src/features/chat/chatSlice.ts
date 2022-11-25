@@ -27,7 +27,7 @@ export const getRooms = createAsyncThunk("/get", async () => {
   return rooms.data;
 });
 
-const roomsCreate = createAsyncThunk(
+export const roomsCreate = createAsyncThunk(
   "/create",
   async ({ room, socket }: any) => {
     const payload = { name: room, socket: socket };
@@ -73,6 +73,12 @@ export const chatSlice = createSlice({
         state.isSuccess = false;
         state.isError = true;
       });
+    //      .addCase(roomsCreate.pending, (state: any) => {
+    //        state.isLoading
+    //      })
+    //      .addCase(roomsCreate.fulfilled, (state: any) => {
+    //        state.isLoading
+    //      })
   },
 });
 
