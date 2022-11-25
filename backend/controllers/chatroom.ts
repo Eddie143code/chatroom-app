@@ -1,25 +1,23 @@
-import { chatroom } from "../data/chatrooms";
+import { Chatroom } from "../models/chatroom";
 
-const data: any = [];
+const createRoom = async (req: any, res: any) => {
+  const { name, socket } = req.body;
 
-const createChatroom = (roomName: any) => {
-  const name = roomName;
-  const nameTest: chatroom = name;
-  const test: any = data.find((n: any) => n === nameTest);
+  const roomTest = await Chatroom.findOne({ where: { name: name } });
 
-  if (test) {
-    console.log("room exists");
-    throw Error;
+  if (roomTest) {
+    return res.json(roomTest);
   }
 
-  data.push(name);
-
-  return data;
+  const room = Chatroom.create({ name: name, socket: socket });
+  return res.json(room);
 };
 
-const getAllRooms = () => {
-  const chatrooms = data;
-  return chatrooms;
+const getAllRooms = async (_req: any, res: any) => {
+  console.log("in getallrooms");
+  const chatrooms = await Chatroom.findAll();
+
+  return res.json(chatrooms);
 };
 
-export { createChatroom, getAllRooms };
+export { getAllRooms, createRoom };

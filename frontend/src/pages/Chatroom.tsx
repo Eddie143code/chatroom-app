@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Messages from "../components/Messages";
 import { sendMsg } from "../features/chat/chatSlice";
-import { endianness } from "os";
 
 const ENDPOINT = "http://localhost:3001";
 
@@ -15,6 +14,7 @@ socket = io(ENDPOINT);
 
 const Chatroom = () => {
   const [sendMessage, setSendMessage] = useState<any>("");
+  const [roomData, setRoomData] = useState<any>("");
 
   const { messages } = useSelector((state: any) => state.chat);
 
@@ -22,12 +22,13 @@ const Chatroom = () => {
 
   const handleMessage = (e: any) => {
     e.preventDefault();
+
     socket.emit(
       "sendMessage",
       {
         user: JSON.stringify(localStorage.getItem("user")),
         message: sendMessage,
-        room: JSON.stringify(localStorage.getItem("room")),
+        room: JSON.stringify(localStorage.getItem("socket")),
       },
       () => {}
     );
@@ -38,12 +39,17 @@ const Chatroom = () => {
       "joinChat",
       {
         user: JSON.stringify(localStorage.getItem("user")),
-        room: localStorage.getItem("room"),
+        room: localStorage.getItem("socket"),
       },
       () => {}
     );
     socket.on("message", ({ user, message }: any) => {
       console.log(user);
+
+      const msg = { user, message };
+      dispatch(sendMsg(msg));
+    });
+    socket.on("roomData", ({ user, message }: any) => {
       const msg = { user, message };
       dispatch(sendMsg(msg));
     });

@@ -1,10 +1,10 @@
 import express from "express";
 const router = express.Router();
 
-import { createChatroom, getAllRooms } from "../controllers/chatroom";
+import { getAllRooms, createRoom } from "../controllers/chatroom";
 
-router.post("/createChatRoom", createChatroom);
+router.get("/", getAllRooms);
 
-router.get("/getAllRooms", getAllRooms);
+router.post("/createRoom", createRoom);
 
 export default router;

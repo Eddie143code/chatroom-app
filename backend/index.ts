@@ -1,12 +1,10 @@
 import express from "express";
 import cors from "cors";
-import router from "./routes/chatrooms";
-import { userCreate } from "./controllers/users";
-import { createChatroom, getAllRooms } from "./controllers/chatroom";
+import routerChatrooms from "./routes/chatrooms";
+import routerUsers from "./routes/users";
 const http = require("http");
 const socketio = require("socket.io");
 const { connectToDatabase } = require("./util/db");
-import { User } from "./models/users";
 
 const app = express();
 
@@ -18,7 +16,8 @@ const io = socketio(server);
 app.use(express.json());
 app.use(cors());
 
-app.use("/api", router);
+app.use("/api/chatrooms", routerChatrooms);
+app.use("/api/users", routerUsers);
 
 app.get("/ping", (_req, res) => {
   console.log("someone pinged here");
@@ -28,20 +27,27 @@ app.get("/ping", (_req, res) => {
 io.on("connection", (socket: any) => {
   console.log("io connected");
 
-  socket.on("createUser", ({ name }: any) => {
-    userCreate({ name });
-  });
+  /* socket.on("createUser", ({ name }: any) => {
+    const User: any = userCreate({ name });
+    console.log(typeof User);
+
+    socket.emit("createdUser", { User });
+  }); */
 
   socket.on("joinChat", ({ user, room }: any) => {
     console.log("in join");
 
-    console.log("User: ");
-    socket.join(room);
     socket.emit(
       "message",
       { user: user, message: "you joined the room" },
       () => {}
     );
+
+    socket.broadcast
+      .to(room)
+      .emit("message", { user: user, message: `${user}, has joined the room` });
+
+    io.to(room).emit("roomData", { user: user, message: "rooms of users" });
 
     /* socket.broadcast
       .to(user.room)
@@ -49,37 +55,14 @@ io.on("connection", (socket: any) => {
       */
   });
 
-  socket.on("sendMessage", ({ user, message, room }: any, callback: any) => {
+  socket.on("sendMessage", ({ user, message, room }: any) => {
+    socket.join(room);
     console.log(`in sendmessage: ${user}, ${message}, ${room} `);
 
     //const User: any = getCurrentUser({ user });
 
-    const username = User.findOne({ where: { name: user } });
-    console.log(username);
-    socket.join(room);
-
-    io.to(room).emit("message", { user, message });
-
-    callback();
-  });
-
-  socket.on("createRoom", (roomName: any, callback: any) => {
-    const test = createChatroom(roomName);
-
-    if (!test) {
-      throw Error;
-    }
-    socket.emit("roomCreated", { roomName });
-
-    callback();
-  });
-
-  socket.on("getRooms", (callback: any) => {
-    const rooms = getAllRooms();
-
-    socket.emit("fetchRooms", { rooms });
-
-    callback();
+    //const username = User.findOne({ where: { name: user } });
+    io.to(room).emit("message", { user: user, message: message });
   });
 });
 

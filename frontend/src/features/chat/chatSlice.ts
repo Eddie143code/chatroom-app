@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import io from "socket.io-client";
 
@@ -10,78 +10,72 @@ interface chatState {
   chatrooms: string[];
 }
 
-let initialState: any = {
+const initialState: any = {
   chatrooms: [],
+  isLoading: false,
+  isSuccess: false,
+  isError: false,
   messages: [],
 };
 
-const ENDPOINT = "http://localhost:3001";
+const ENDPOINT = "http://localhost:3001/api/chatrooms";
 
-let socket = io(ENDPOINT);
+export const getRooms = createAsyncThunk("/get", async () => {
+  console.log("in roomsGet");
+  const rooms = await axios.get(`${ENDPOINT}`);
 
-const joinRoom = (room: roomType) => {
-  socket.emit("join", { room }, (error: any) => {
-    if (error) {
-      console.log(error);
-    }
-  });
-};
+  return rooms.data;
+});
 
-/*const createRoom = (roomName: roomType) => {
- 
-  });
-}; 
+const roomsCreate = createAsyncThunk(
+  "/create",
+  async ({ room, socket }: any) => {
+    const payload = { name: room, socket: socket };
+    const rooms = await axios.post(`${ENDPOINT}/createRoom`, payload);
 
-const roomCreated = () => {};
-
-*/
+    return rooms.data;
+  }
+);
 
 export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    join: (state, payload: any) => {
-      const { room } = payload;
-      joinRoom(room);
-    },
-    getRoomsEmit: (state) => {
+    createRoom: (state, action) => {
+      const { room, socket } = action.payload;
+      roomsCreate({ room, socket });
       return state;
     },
-    getRoomsOn: (state, payload) => {
-      let room: any = payload.payload;
-      console.log(room);
-      state.chatrooms = [...room];
-
-      return state;
-    },
-    sendMsg: (state, payload) => {
-      const message = payload.payload;
+    sendMsg: (state, action) => {
+      const message = action.payload;
 
       state.messages.push(message);
 
       return state;
     },
+  },
 
-    create: (state, payload: any) => {
-      const roomName = payload.payload;
-      socket.emit("createRoom", roomName, (error: any) => {
-        if (error) {
-          console.log(error);
-        }
+  extraReducers: (builder) => {
+    builder
+      .addCase(getRooms.pending, (state: any) => {
+        state.isLoading = true;
+      })
+      .addCase(getRooms.fulfilled, (state: any, action: any) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        const allRooms = action.payload.map((room: any) => {
+          return room.name;
+        });
+        state.chatrooms = allRooms;
+      })
+      .addCase(getRooms.rejected, (state: any) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
       });
-    },
-    createdRoom: (state: any) => {
-      let room;
-      socket.on("roomCreated", ({ roomName }: any) => {
-        room = roomName;
-      });
-
-      state.chatrooms.push({ room });
-    },
   },
 });
 
-export const { getRoomsEmit, create, createdRoom, getRoomsOn, sendMsg } =
-  chatSlice.actions;
+export const { createRoom, sendMsg } = chatSlice.actions;
 
 export default chatSlice.reducer;
