@@ -7,7 +7,7 @@ const createRoom = async (req: any, res: any) => {
     where: { name: name, socket: socket },
   });
 
-  if (roomTest.name === name) {
+  if (roomTest) {
     return res.json(roomTest);
   }
 

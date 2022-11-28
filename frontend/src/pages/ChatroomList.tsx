@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AppDispatch } from "../app/store";
 
-import { createRoom, sendMsg, getRooms } from "../features/chat/chatSlice";
+import { roomsCreate, sendMsg, getRooms } from "../features/chat/chatSlice";
 
 const ENDPOINT = "http://localhost:3001";
 
@@ -25,8 +25,11 @@ const Chatrooms = () => {
     e.preventDefault();
     const roomTemp = e.target.temp.value;
 
-    dispatch(createRoom({ room: roomTemp, socket: String(socket.id) }));
+    await dispatch(
+      roomsCreate({ room: String(roomTemp), socket: String(socket.id) })
+    );
     setRoom(room);
+    await dispatch(getRooms());
   };
 
   const roomClick = async (e: any) => {

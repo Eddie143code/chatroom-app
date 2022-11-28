@@ -30,8 +30,12 @@ export const getRooms = createAsyncThunk("/get", async () => {
 export const roomsCreate = createAsyncThunk(
   "/create",
   async ({ room, socket }: any) => {
-    const payload = { name: room, socket: socket };
-    const rooms = await axios.post(`${ENDPOINT}/createRoom`, payload);
+    console.log(room, socket);
+
+    const rooms = await axios.post(`${ENDPOINT}/createRoom`, {
+      name: room,
+      socket: socket,
+    });
 
     return rooms.data;
   }
@@ -41,11 +45,8 @@ export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    createRoom: (state, action) => {
-      const { room, socket } = action.payload;
-      roomsCreate({ room, socket });
-      return state;
-    },
+    //createRoom: (state, action) => {
+    //},
     sendMsg: (state, action) => {
       const message = action.payload;
 
@@ -72,16 +73,21 @@ export const chatSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
+      })
+      .addCase(roomsCreate.pending, (state: any) => {
+        state.isLoading = true;
+      })
+      .addCase(roomsCreate.fulfilled, (state: any) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(roomsCreate.rejected, (state: any) => {
+        state.isLoading = false;
+        state.isError = true;
       });
-    //      .addCase(roomsCreate.pending, (state: any) => {
-    //        state.isLoading
-    //      })
-    //      .addCase(roomsCreate.fulfilled, (state: any) => {
-    //        state.isLoading
-    //      })
   },
 });
 
-export const { createRoom, sendMsg } = chatSlice.actions;
+export const { sendMsg } = chatSlice.actions;
 
 export default chatSlice.reducer;
